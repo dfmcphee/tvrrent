@@ -1,0 +1,20 @@
+$teal: #1B998B;
+$purple: #2E294E;
+$red: #E71D36;
+$orange: #F46036;
+$green: #C5D86D;
+$white: #FFF;
+$charcoal: #262626;
+
+$wrapper-max-width: 1200px;
+$default-spacing: 20px;
+$default-spacing-halved: $default-spacing / 2;
+
+@import 'base';
+@import 'layout';
+
+@import 'components/button';
+@import 'components/icon';
+@import 'components/navbar';
+@import 'components/torrent';
+@import 'components/torrent-list';

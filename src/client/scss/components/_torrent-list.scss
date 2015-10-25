@@ -1,0 +1,9 @@
+/* Torrent List */
+
+.torrent-list {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-left: -$default-spacing;
+  margin-top: $default-spacing;
+}

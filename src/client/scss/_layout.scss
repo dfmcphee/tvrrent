@@ -1,0 +1,23 @@
+/* Layout */
+
+.wrapper {
+  max-width: $wrapper-max-width;
+  margin: 0 auto;
+  padding: 0 $default-spacing-halved;
+}
+
+.layout {
+  display: flex;
+}
+
+.layout__main {
+  flex: 1 1 auto;
+}
+
+.layout__sidebar {
+  flex: 1 1 auto;
+}
+
+.slide-panel {
+  width: 200px;
+}

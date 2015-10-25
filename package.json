@@ -1,0 +1,60 @@
+{
+  "name": "tvrrent",
+  "version": "0.0.1",
+  "description": "location sharing app",
+  "main": "lib/server/server.js",
+  "scripts": {
+    "test": "jest",
+    "clean": "rm -rf lib",
+    "watch-js": "./node_modules/.bin/babel src -d lib --experimental -w",
+    "dev-server": "node lib/server/webpack",
+    "server": "nodemon lib/server/server",
+    "prod-server": "NODE_ENV=production node lib/server/server",
+    "start": "npm run watch-js & npm run dev-server & npm run server",
+    "build-client": "webpack -p --config webpack.config.production.js",
+    "build-server": "./node_modules/.bin/babel src/server --out-dir lib/server",
+    "prod-deploy": "npm run build-client ; npm run build-server ; npm run prod-server"
+  },
+  "license": "MIT",
+  "engines": {
+    "iojs": "2.4.x"
+  },
+  "dependencies": {
+    "babel": "^5.5.6",
+    "babel-core": "^5.5.6",
+    "babel-jest": "^5.3.0",
+    "babel-loader": "^5.1.4",
+    "css-loader": "^0.18.0",
+    "ejs": "^2.3.4",
+    "episode": "^0.2.0",
+    "express": "^4.13.3",
+    "feed-read": "0.0.1",
+    "jest-cli": "^0.5.4",
+    "nedb": "^1.2.1",
+    "node-libs-browser": "^0.5.2",
+    "node-sass": "^3.3.2",
+    "nodemon": "^1.3.7",
+    "omdb": "^0.3.1",
+    "react": "^0.14.0",
+    "react-addons-test-utils": "^0.14.0",
+    "react-dom": "^0.14.0",
+    "react-hot-loader": "^1.2.7",
+    "read-torrent": "^1.3.0",
+    "request": "^2.65.0",
+    "sass-loader": "^2.0.1",
+    "sax": "^1.1.4",
+    "socket.io": "^1.3.6",
+    "socket.io-client": "^1.3.6",
+    "style-loader": "^0.12.4",
+    "torrent-stream": "^1.0.0",
+    "underscore": "^1.8.3",
+    "webpack": "^1.9.10",
+    "webpack-dev-server": "^1.9.0"
+  },
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/react"
+    ]
+  }
+}

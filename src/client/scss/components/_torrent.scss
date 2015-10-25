@@ -1,0 +1,16 @@
+/* Torrent */
+
+$torrent-width: 200px;
+
+.torrent {
+  flex: 0 1 $torrent-width;
+  margin: 0 $default-spacing $default-spacing $default-spacing;
+}
+
+.torrent__image {
+  width: 200px;
+  height: 300px;
+  background-repeat: no-repeat;;
+  background-size: cover;
+  background-clip: border-box;
+}

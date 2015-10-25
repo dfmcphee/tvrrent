@@ -1,0 +1,54 @@
+/* Button */
+
+.button {
+  background: $teal;
+  font-size: 0.9rem;
+  border-radius: 3px;
+  color: $white;
+  font-weight: 100;
+  padding: 6px 8px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  > span {
+    flex: 1 1 auto;
+  }
+
+  > .icon {
+    margin-left: $default-spacing-halved;
+    flex: 0 0 auto;
+  }
+}
+
+.button:hover,
+.button:active {
+  background: darken($teal, 10%);
+}
+
+.button[disabled] {
+  background: darken($teal, 10%);
+  cursor: default;
+}
+
+.button--secondary {
+  background: $red;
+}
+
+.button--secondary:hover,
+.button--secondary:active {
+  background: darken($red, 10%);
+}
+
+.button--nav {
+  background: transparent;
+}
+
+.button--nav:hover,
+.button--nav:active {
+  background: transparent;
+  color: rgba($white, 0.8);
+}

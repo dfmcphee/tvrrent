@@ -1,0 +1,28 @@
+/* Navbar */
+
+.navbar__background {
+  background: $red;
+  color: $white;
+}
+
+.navbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar__logo {
+  flex: 1 1 auto;
+  color: $white;
+  padding: $default-spacing-halved 0;
+
+  svg {
+    height: 70px;
+    fill: $white;
+  }
+}
+
+.navbar__nav {
+  flex: 1 1 auto;
+}
