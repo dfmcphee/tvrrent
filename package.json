@@ -30,6 +30,7 @@
     "express": "^4.13.3",
     "feed-read": "0.0.1",
     "jest-cli": "^0.5.4",
+    "moment": "^2.10.6",
     "nedb": "^1.2.1",
     "node-libs-browser": "^0.5.2",
     "node-sass": "^3.3.2",

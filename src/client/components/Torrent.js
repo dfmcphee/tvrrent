@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 export default class Torrent extends React.Component {
   constructor(props) {
@@ -56,6 +57,7 @@ export default class Torrent extends React.Component {
         <h3>{this.props.title}</h3>
         <p>Season: {this.props.season} Episode: {this.props.episode}</p>
         {download}
+        <p>{moment(this.props.published).from(moment())}</p>
       </div>
     )
   }

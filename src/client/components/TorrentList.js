@@ -21,6 +21,7 @@ export default class TorrentList extends React.Component {
         complete={torrent.downloaded}
         poster={torrent.poster}
         socket={this.props.socket}
+        published={torrent.published}
       />
     )
   }

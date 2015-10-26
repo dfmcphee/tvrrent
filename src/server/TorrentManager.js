@@ -22,7 +22,7 @@ let engineOptions = {
 };
 
 let updateMetadata = function(torrent) {
-  let title = torrent.title.split(/ (\d)+x(\d)+| S(\d)+E(\d)+/);
+  let title = torrent.title.split(/ (\d)+x(\d)+| S(\d)+E(\d)+|.S(\d)+E(\d)+/i);
   omdb.search({terms: title[0], type: 'series'}, (err, results) => metaSearch(err, results, torrent, title[0]));
 };
 
@@ -33,7 +33,7 @@ let updateAllMetadata = function() {
 };
 
 let updateTorrents = function() {
-  db.find({}, (err, torrents) => {
+  db.find({}).sort({ published: -1 }).exec((err, torrents) => {
     sockets.emit('feed-updated', torrents);
   });
 };
@@ -41,7 +41,8 @@ let updateTorrents = function() {
 let metaSearch = function(err, results, torrent, title) {
   handleError(err);
 
-  if (!results && !results.length) {
+  if (!results[0]) {
+    console.log(torrent);
     return console.log('No results found');
   }
 
@@ -138,9 +139,12 @@ let torrentManager = {
 
   add: function(url) {
     readTorrent(url, (err, torrent) => {
+      let published = torrent.created ? torrent.created : Date();
+
       let insert = {
         title: torrent.name,
-        link: url
+        link: url,
+        published: published
       };
 
       db.insert(insert, (err, newTorrent) => {
