@@ -1,18 +1,17 @@
-/* Navbar */
+/* Banner */
 
-.navbar__background {
+.banner {
   background: $red;
   color: $white;
-}
-
-.navbar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  padding-left: $default-spacing;
+  height: $banner-height;
 }
 
-.navbar__logo {
+.banner__logo {
   flex: 1 1 auto;
   color: $white;
   padding: $default-spacing-halved 0;
@@ -21,8 +20,4 @@
     height: 70px;
     fill: $white;
   }
-}
-
-.navbar__nav {
-  flex: 1 1 auto;
 }

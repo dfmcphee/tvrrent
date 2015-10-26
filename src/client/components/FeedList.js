@@ -10,25 +10,36 @@ export default class FeedList extends React.Component {
   }
 
   urlChanged(event) {
-    console.log(event.target.value);
     this.setState({
       url: event.target.value
     });
   }
 
   addFeed() {
-    console.log(this.state.feedUrl);
+    this.setState({
+      url: null
+    });
     this.props.addFeed(this.state.url);
+  }
+
+  renderItem(feed) {
+    return (
+      <li>{feed.url}</li>
+    )
   }
 
   render() {
     let url = this.state.url;
     return (
       <div className="slide-panel">
-        <div className="feed-list">
+        <h2 className="slide-panel__header">Add an RSS feed</h2>
+        <div className="feed-form">
           <input type="text" value={url} onChange={::this.urlChanged} />
-          <button onClick={::this.addFeed}>Add</button>
+          <button className="button" onClick={::this.addFeed}>Add</button>
         </div>
+        <ul className="feed-list">
+          {this.props.feeds.map(::this.renderItem)}
+        </ul>
       </div>
     )
   }

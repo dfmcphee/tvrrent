@@ -1,0 +1,25 @@
+.feed-form {
+  display: flex;
+
+  input {
+    flex: 1 1 auto;
+  }
+
+  button {
+    flex: 0 0 auto;
+  }
+}
+
+.feed-list {
+  list-style: none;
+  padding: 0;
+
+  li {
+    margin: $default-spacing-quartered 0;
+    word-break: break-all;
+    color: $white;
+    background: rgba($charcoal, 0.8);
+    padding: $default-spacing;
+    border-radius: $default-border-radius;
+  }
+}

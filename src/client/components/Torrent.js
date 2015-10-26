@@ -25,25 +25,26 @@ export default class Torrent extends React.Component {
   render() {
     let url = `/downloads/${this.props.path}`;
 
-    let totals = '';
+    let totals;
     if (this.props.totalDownloaded) {
       totals = this.formatDownloadTotal(this.props.totalDownloaded, this.props.size);
     }
 
-    let download = '';
+    let download;
     if (this.props.complete) {
       download = <p><a className="button button--secondary" href={url}>Play <svg className="icon"><use xlinkHref="#play" /></svg></a></p>;
     } else if (this.props.downloading) {
       let percentage = <span className="torrent__totals">{totals}</span>;
-      download = <p><button className="button" disabled="disabled">Downloading <svg className="icon"><use xlinkHref="#download" /></svg></button>{percentage}</p>;
+      download = <p><button className="button" disabled="disabled"><svg className="icon"><use xlinkHref="#download" /></svg> {percentage}</button></p>;
     } else {
       download = <p><button className="button" onClick={::this.download}>Download <svg className="icon"><use xlinkHref="#download" /></svg></button></p>;
     }
 
-    let image = '';
+    let image;
     if (this.props.poster) {
+      let url = encodeURI(`/cover?url=${this.props.poster}`);
       let imageStyle = {
-        backgroundImage: `url(${this.props.poster})`
+        backgroundImage: `url(${url})`
       };
 
       image = <div className="torrent__image" style={imageStyle}></div>;

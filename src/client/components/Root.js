@@ -1,10 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
-import Navbar from './Navbar';
+import Banner from './Banner';
+import Nav from './Nav';
 import FeedList from './FeedList';
 import TorrentList from './TorrentList';
 import TorrentForm from './TorrentForm';
+
+let routes = {
+  torrentForm: 'torrent-form',
+  feedList: 'feed-list'
+};
 
 export default class Root extends React.Component {
   // Set default state for component
@@ -13,14 +19,15 @@ export default class Root extends React.Component {
     this.socket = io();
     this.state = {
       torrents: [],
-      showFeeds: false,
-      showTorrentForm: false
+      feeds: [],
+      navItem: false
     };
   }
 
   // Event fired before component is loaded
   componentWillMount() {
     this.socket.on('feed-updated', ::this.updateFeed);
+    this.socket.on('feeds-updated', ::this.updateFeeds);
   }
 
   updateFeed(torrents) {
@@ -31,8 +38,15 @@ export default class Root extends React.Component {
     }
   }
 
+  updateFeeds(feeds) {
+    if (feeds && feeds.length) {
+      this.setState({
+        feeds: feeds
+      });
+    }
+  }
+
   addFeed(url) {
-    console.log(url);
     this.socket.emit('add-feed', url);
   }
 
@@ -41,30 +55,43 @@ export default class Root extends React.Component {
   }
 
   toggleFeeds() {
-    this.setState({
-      showFeeds: !this.state.showFeeds
-    });
+    this.toggleNavItem(routes.feedList);
   }
 
   toggleTorrentForm() {
-    this.setState({
-      showTorrentForm: !this.state.showTorrentForm
-    });
+    this.toggleNavItem(routes.torrentForm);
+  }
+
+  toggleNavItem(route) {
+    let state = {};
+    if (this.state.navItem === route) {
+      state = { navItem: false };
+    } else {
+      state = { navItem: route };
+    }
+    this.setState(state);
+  }
+
+  isActive(item) {
+    return (this.state.navItem === item);
   }
 
   // Render the markup for component
   render() {
     return (
       <div className="container">
-        <Navbar toggleFeeds={::this.toggleFeeds} />
-        <div className="wrapper">
+        <div className="container__banner">
+          <Banner />
+        </div>
+        <div className="container__body">
           <div className="layout">
             <div className="layout__main">
               <TorrentList torrents={this.state.torrents} socket={this.socket} />
             </div>
             <div className="layout__sidebar">
-              { this.state.showTorrentForm ? <TorentForm addTorrent={::this.addTorrent} /> : null }
-              { this.state.showFeeds ? <FeedList addFeed={::this.addFeed} /> : null }
+              <Nav toggleFeeds={::this.toggleFeeds} toggleTorrentForm={::this.toggleTorrentForm} />
+              { this.isActive(routes.torrentForm) ? <TorrentForm addTorrent={::this.addTorrent} /> : null }
+              { this.isActive(routes.feedList) ? <FeedList addFeed={::this.addFeed} feeds={this.state.feeds} /> : null }
             </div>
           </div>
         </div>

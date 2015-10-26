@@ -1,0 +1,18 @@
+/* Slide Panel */
+
+.slide-panel {
+  width: 200px;
+  position: fixed;
+  top: $banner-height;
+  right: $nav-width;
+  background: $charcoal;
+  height: calc(100vh - #{$banner-height});
+  padding: $default-spacing-halved;
+}
+
+.slide-panel__header {
+  font-weight: 200;
+  font-size: 18px;
+  margin: 0 0 $default-spacing-halved 0;
+  color: $white;
+}

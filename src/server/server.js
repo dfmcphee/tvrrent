@@ -1,8 +1,9 @@
 import express from 'express';
 import http from 'http';
+import request from 'request';
 import io from 'socket.io';
 import nedb from 'nedb';
-import torrentManager from './TorrentManager';
+import torrentManager from './torrentManager';
 
 let exec = require('child_process').exec;
 let app = express();
@@ -33,12 +34,28 @@ app.get('/', function(req, res) {
   });
 });
 
+app.get('/cover', function(req, res) {
+  if (req.query.url) {
+    let url = decodeURI(req.query.url);
+    request.get(url).pipe(res);
+  }
+});
+
 torrentManager.setSockets(sockets);
 
+let updateFeeds = function() {
+  feeds.find({}, (err, feedList) => {
+    sockets.emit('feeds-updated', feedList);
+  });
+};
+
 sockets.on('connection', function(socket) {
-  feeds.find({}, function (err, feeds) {
-    if (feeds && feeds.length) {
-      torrentManager.refreshFeed(feeds[0].url);
+  feeds.find({}, function (err, feedList) {
+    if (feedList && feedList.length) {
+      sockets.emit('feeds-updated', feedList);
+      feedList.forEach(function(feed){
+        torrentManager.refreshFeed(feed.url);
+      });
     }
   });
 
@@ -47,6 +64,7 @@ sockets.on('connection', function(socket) {
       feeds.insert({
         url: url
       }, function (err, newFeed) {
+        updateFeeds();
         torrentManager.refreshFeed(newFeed.url);
       });
     }

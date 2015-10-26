@@ -4,17 +4,26 @@ $red: #E71D36;
 $orange: #F46036;
 $green: #C5D86D;
 $white: #FFF;
-$charcoal: #262626;
+$charcoal: rgba(#262626, 0.95);
 
 $wrapper-max-width: 1200px;
 $default-spacing: 20px;
 $default-spacing-halved: $default-spacing / 2;
+$default-spacing-quartered: $default-spacing / 4;
+$default-border-radius: 3px;
+
+$banner-height: 110px;
+$nav-width: 60px;
 
 @import 'base';
 @import 'layout';
 
 @import 'components/button';
 @import 'components/icon';
-@import 'components/navbar';
+@import 'components/banner';
+@import 'components/nav';
+@import 'components/slide-panel';
 @import 'components/torrent';
 @import 'components/torrent-list';
+@import 'components/torrent-form';
+@import 'components/feed-list';

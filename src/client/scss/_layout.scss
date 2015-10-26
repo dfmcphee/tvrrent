@@ -6,18 +6,32 @@
   padding: 0 $default-spacing-halved;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.container__banner {
+  flex: 0 0 auto;
+}
+
+.container__body {
+  flex: 1 1 auto;
+}
+
 .layout {
   display: flex;
 }
 
 .layout__main {
   flex: 1 1 auto;
+  height: calc(100vh - #{$banner-height});
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 .layout__sidebar {
-  flex: 1 1 auto;
-}
-
-.slide-panel {
-  width: 200px;
+  flex: 0 0 $nav-width;
+  background: $charcoal;
+  height: calc(100vh - #{$banner-height});
 }

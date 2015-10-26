@@ -118,7 +118,6 @@ let torrentManager = {
           };
 
           db.update({ _id: torrent.id }, { $set: update }, {}, function(err) {
-            console.log('Updating download...');
             updateTorrents();
           });
         });

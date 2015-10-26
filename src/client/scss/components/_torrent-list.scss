@@ -4,6 +4,7 @@
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+  padding-left: $default-spacing;
   margin-left: -$default-spacing;
   margin-top: $default-spacing;
 }

@@ -1,0 +1,11 @@
+/* Nav */
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  width: $nav-width;
+}
+
+.nav__item {
+  display: flex;
+}
