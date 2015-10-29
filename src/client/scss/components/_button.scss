@@ -21,6 +21,10 @@
   > .icon {
     flex: 0 0 auto;
   }
+
+  > span + .icon {
+    margin-left: $default-spacing-halved;
+  }
 }
 
 .button:hover,
