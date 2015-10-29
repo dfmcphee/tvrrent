@@ -24,7 +24,7 @@ export default class FeedList extends React.Component {
 
   renderItem(feed) {
     return (
-      <li>{feed.url}</li>
+      <li key={feed._id}>{feed.url}</li>
     )
   }
 

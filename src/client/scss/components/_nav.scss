@@ -4,8 +4,13 @@
   display: flex;
   flex-direction: column;
   width: $nav-width;
+  padding: $default-spacing 0;
 }
 
 .nav__item {
   display: flex;
+}
+
+.nav__item + .nav__item {
+  margin-top: $default-spacing;
 }

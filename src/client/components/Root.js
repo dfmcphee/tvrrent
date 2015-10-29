@@ -6,11 +6,7 @@ import Nav from './Nav';
 import FeedList from './FeedList';
 import TorrentList from './TorrentList';
 import TorrentForm from './TorrentForm';
-
-let routes = {
-  torrentForm: 'torrent-form',
-  feedList: 'feed-list'
-};
+import routes from '../config/routes';
 
 export default class Root extends React.Component {
   // Set default state for component
@@ -54,14 +50,6 @@ export default class Root extends React.Component {
     this.socket.emit('add-torrent', url);
   }
 
-  toggleFeeds() {
-    this.toggleNavItem(routes.feedList);
-  }
-
-  toggleTorrentForm() {
-    this.toggleNavItem(routes.torrentForm);
-  }
-
   toggleNavItem(route) {
     let state = {};
     if (this.state.navItem === route) {
@@ -85,13 +73,14 @@ export default class Root extends React.Component {
         </div>
         <div className="container__body">
           <div className="layout">
+            <div className="layout__sidebar">
+              <Nav active={this.state.navItem}
+                toggleItem={::this.toggleNavItem} />
+              { this.isActive('torrent-form') ? <TorrentForm addTorrent={::this.addTorrent} /> : null }
+              { this.isActive('feed-list') ? <FeedList addFeed={::this.addFeed} feeds={this.state.feeds} /> : null }
+            </div>
             <div className="layout__main">
               <TorrentList torrents={this.state.torrents} socket={this.socket} />
-            </div>
-            <div className="layout__sidebar">
-              <Nav toggleFeeds={::this.toggleFeeds} toggleTorrentForm={::this.toggleTorrentForm} />
-              { this.isActive(routes.torrentForm) ? <TorrentForm addTorrent={::this.addTorrent} /> : null }
-              { this.isActive(routes.feedList) ? <FeedList addFeed={::this.addFeed} feeds={this.state.feeds} /> : null }
             </div>
           </div>
         </div>

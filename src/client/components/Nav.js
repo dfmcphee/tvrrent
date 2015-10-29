@@ -1,23 +1,25 @@
 import React from 'react';
+import NavItem from './NavItem';
+import routes from '../config/routes';
 
 export default class Nav extends React.Component {
   constructor(props) {
     super(props);
   }
 
+  renderItem(route) {
+    return(
+      <NavItem key={route.name}
+        route={route}
+        active={this.props.active === route.name}
+        toggleItem={this.props.toggleItem} />
+    );
+  }
+
   render() {
     return (
       <nav className="nav">
-        <div className="nav__item">
-          <button className="button button--nav" onClick={this.props.toggleFeeds}>
-            <svg className="icon"><use xlinkHref="#feed" /></svg>
-          </button>
-        </div>
-        <div className="nav__item">
-          <button className="button button--nav" onClick={this.props.toggleTorrentForm}>
-            <svg className="icon"><use xlinkHref="#link" /></svg>
-          </button>
-        </div>
+        {routes.map(::this.renderItem)}
       </nav>
     )
   }

@@ -19,7 +19,6 @@
   }
 
   > .icon {
-    margin-left: $default-spacing-halved;
     flex: 0 0 auto;
   }
 }
@@ -45,10 +44,25 @@
 
 .button--nav {
   background: transparent;
+  width: 100%;
+  padding: $default-spacing-halved;
 }
 
 .button--nav:hover,
 .button--nav:active {
-  background: transparent;
   color: rgba($white, 0.8);
+  background: transparent;
+}
+
+.button:focus {
+  outline: none;
+}
+
+.button--active {
+  color: $red;
+}
+
+.button--active:hover,
+.button--active:active {
+  color: rgba($red, 0.8);
 }

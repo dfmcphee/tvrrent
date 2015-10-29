@@ -4,7 +4,7 @@
   width: 200px;
   position: fixed;
   top: $banner-height;
-  right: $nav-width;
+  left: $nav-width;
   background: $charcoal;
   height: calc(100vh - #{$banner-height});
   padding: $default-spacing-halved;
