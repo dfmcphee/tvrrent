@@ -1,3 +1,4 @@
+import _ from 'underscore';
 import torrentStream from 'torrent-stream';
 import readTorrent from 'read-torrent';
 import feed from 'feed-read';
@@ -85,8 +86,14 @@ let torrentManager = {
   },
 
   refreshFeed: function(url) {
-    feed(url, (err, incomingTorrents) => {
-      db.insert(incomingTorrents, (err) => updateAllMetadata());
+    db.find({}, (err, torrents) => {
+      feed(url, (err, incomingTorrents) => {
+        let newTorrents = incomingTorrents.filter(function(torrent) {
+          let exists = _.findWhere(torrents, { link: torrent.link });
+          return !exists;
+        });
+        db.insert(newTorrents, (err) => updateAllMetadata());
+      });
     });
   },
 
