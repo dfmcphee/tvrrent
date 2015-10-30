@@ -13,6 +13,7 @@
     "start": "npm run watch-js & npm run dev-server & npm run server",
     "build-client": "webpack -p --config webpack.config.production.js",
     "build-server": "./node_modules/.bin/babel src/server --out-dir lib/server",
+    "build": "npm run build-client ; npm run build-server",
     "prod-deploy": "npm run build-client ; npm run build-server ; npm run prod-server"
   },
   "license": "MIT",
