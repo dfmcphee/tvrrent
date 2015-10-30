@@ -23,9 +23,10 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
 app.get('/', function(req, res) {
+  let environment = process.env.NODE_ENV || 'development';
   let appScript = '/js/app.js';
 
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV === 'development') {
     appScript = 'http://localhost:8080' + appScript;
   }
 
