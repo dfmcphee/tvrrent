@@ -8,6 +8,7 @@
   background: $charcoal;
   height: calc(100vh - #{$banner-height});
   padding: $default-spacing-halved;
+  z-index: 1;
 }
 
 .slide-panel__header {

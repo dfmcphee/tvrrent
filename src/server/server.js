@@ -26,7 +26,7 @@ app.get('/', function(req, res) {
   let environment = process.env.NODE_ENV || 'development';
   let appScript = '/js/app.js';
 
-  if (process.env.NODE_ENV === 'development') {
+  if (environment === 'development') {
     appScript = 'http://localhost:8080' + appScript;
   }
 
