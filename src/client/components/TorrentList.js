@@ -10,9 +10,11 @@ export default class TorrentList extends React.Component {
     return (
       <Torrent id={torrent._id}
         key={torrent._id}
-        title={torrent.show}
+        title={torrent.name}
+        show={torrent.show}
         season={torrent.season}
-        episode= {torrent.episode}
+        episode={torrent.episode}
+        year={torrent.year}
         url={torrent.link}
         path={torrent.path}
         downloading={torrent.downloading}

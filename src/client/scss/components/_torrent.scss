@@ -24,3 +24,11 @@ $totals-width: 60px;
   margin-left: $default-spacing-halved;
   width: $totals-width;
 }
+
+.torrent__actions {
+  display: flex;
+
+  .button + .button {
+    margin-left: $default-spacing-halved;
+  }
+}

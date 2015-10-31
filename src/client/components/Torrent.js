@@ -24,21 +24,23 @@ export default class Torrent extends React.Component {
   }
 
   render() {
-    let url = `/downloads/${this.props.path}`;
-
     let totals;
     if (this.props.totalDownloaded) {
       totals = this.formatDownloadTotal(this.props.totalDownloaded, this.props.size);
     }
 
+    let streamURL = `/stream?path=${encodeURIComponent(this.props.path)}`;
+    let playButton = <a className="button button--secondary" href={streamURL} target="_blank">Play <svg className="icon"><use xlinkHref="#play" /></svg></a>;
+
     let download;
     if (this.props.complete) {
-      download = <p><a className="button button--secondary" href={url}>Play <svg className="icon"><use xlinkHref="#play" /></svg></a></p>;
+      download = <div className="torrent__actions">{playButton}</div>;
     } else if (this.props.downloading) {
       let percentage = <span className="torrent__totals">{totals}</span>;
-      download = <p><button className="button" disabled="disabled"><svg className="icon"><use xlinkHref="#download" /></svg> {percentage}</button></p>;
+      let downloadButton = <button className="button" disabled="disabled"><svg className="icon"><use xlinkHref="#download" /></svg> {percentage}</button>;
+      download = <div className="torrent__actions">{downloadButton}{playButton}</div>
     } else {
-      download = <p><button className="button" onClick={::this.download}>Download <svg className="icon"><use xlinkHref="#download" /></svg></button></p>;
+      download = <div className="torrent__actions"><button className="button" onClick={::this.download}>Download <svg className="icon"><use xlinkHref="#download" /></svg></button></div>;
     }
 
     let image;
@@ -51,11 +53,18 @@ export default class Torrent extends React.Component {
       image = <div className="torrent__image" style={imageStyle}></div>;
     }
 
+    let meta;
+    if (this.props.show) {
+      meta = <p>Season: {this.props.season} Episode: {this.props.episode}</p>;
+    } else {
+      meta = <p>{this.props.year}</p>;
+    }
+
     return (
-      <div className="torrent" key={this.props.title}>
+      <div className="torrent" key={this.props.id}>
         {image}
         <h3>{this.props.title}</h3>
-        <p>Season: {this.props.season} Episode: {this.props.episode}</p>
+        {meta}
         {download}
         <p>{moment(this.props.published).from(moment())}</p>
       </div>

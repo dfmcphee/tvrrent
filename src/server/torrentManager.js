@@ -5,6 +5,7 @@ import feed from 'feed-read';
 import nedb from 'nedb';
 import omdb from 'omdb';
 import episode from 'episode';
+import guessit from 'guessit-wrapper';
 
 let handleError = function(err) {
   if (err) {
@@ -22,9 +23,23 @@ let engineOptions = {
   path: './public/downloads'
 };
 
+let streams = {};
+
 let updateMetadata = function(torrent) {
-  let title = torrent.title.split(/ (\d)+x(\d)+| S(\d)+E(\d)+|.S(\d)+E(\d)+/i);
-  omdb.search({terms: title[0], type: 'series'}, (err, results) => metaSearch(err, results, torrent, title[0]));
+  guessit.parseName(torrent.title).then(function(result) {
+    let title;
+    if (result.type === 'episode') {
+      title = result.series;
+    }
+    else {
+      if (!/(\d){4}/.test(result.unidentified[0])) {
+        title = result.unidentified[0];
+      } else {
+        title = result.unidentified[1];
+      }
+    }
+    omdb.search({terms: title, type: 'series'}, (err, results) => metaTVSearch(err, results, torrent, title));
+  });
 };
 
 let updateAllMetadata = function() {
@@ -39,32 +54,55 @@ let updateTorrents = function() {
   });
 };
 
-let metaSearch = function(err, results, torrent, title) {
+let metaTVSearch = function(err, results, torrent, title) {
   handleError(err);
-
-  if (!results[0]) {
-    console.log(torrent);
-    return console.log('No results found');
+  if (!results || !results[0]) {
+    console.log('No TV results found');
+    omdb.search({terms: title}, (err, results) => metaMovieSearch(err, results, torrent, title));
   }
-
-  let result = results[0];
-
-  omdb.get(result.imdb, (err, show) => metaResult(err, show, torrent, title));
+  else {
+    omdb.get(results[0].imdb, (err, show) => metaResult(err, show, torrent, title));
+  }
 };
 
-let metaResult = function(err, show, torrent, title) {
+let metaMovieSearch = function(err, results, torrent, title) {
+  console.log(results);
+  if (!results || !results[0]) {
+    console.log('No movie results found');
+    let update = {
+      name: title,
+      show: false
+    };
+    db.update({ _id: torrent._id }, { $set: update }, {}, updateTorrents);
+  }
+  else {
+    omdb.get(results[0].imdb, (err, movie) => metaResult(err, movie, torrent, title));
+  }
+}
+
+let metaResult = function(err, result, torrent, title) {
   handleError(err);
 
-  let episodeMeta = episode(torrent.title);
+  let update;
+  if (result.type === 'movie') {
+    update = {
+      name: title,
+      year: result.year,
+      show: false
+    };
+  }
+  else {
+    let episodeMeta = episode(torrent.title);
+    update = {
+      name: title,
+      show: true,
+      season: episodeMeta.season,
+      episode: episodeMeta.episode
+    };
+  }
 
-  let update = {
-    show: title,
-    season: episodeMeta.season,
-    episode: episodeMeta.episode
-  };
-
-  if (show.poster) {
-    update.poster = show.poster;
+  if (result.poster) {
+    update.poster = result.poster;
   }
 
   db.update({ _id: torrent._id }, { $set: update }, {}, updateTorrents);
@@ -109,7 +147,8 @@ let torrentManager = {
           engine.files.forEach(function(file) {
             if (file.name.includes('.mp4')) {
               let stream = file.createReadStream();
-              selectedFile = file
+              streams[torrent.id] = stream;
+              selectedFile = file;
             } else {
               file.deselect();
             }
@@ -137,11 +176,16 @@ let torrentManager = {
           };
 
           db.update({ _id: torrent.id }, { $set: { downloaded: true } }, {}, updateTorrents);
+          engine.destroy();
         });
 
         engines[torrent.id] = engine;
       }
     });
+  },
+
+  getStream: function(id) {
+    return streams[id];
   },
 
   add: function(url) {
