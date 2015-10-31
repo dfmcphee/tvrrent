@@ -4,3 +4,4 @@ npm-debug.log
 public/downloads/
 torrents.db
 feeds.db
+public/js/app.js
