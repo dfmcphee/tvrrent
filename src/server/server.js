@@ -47,10 +47,12 @@ app.get('/stream', function(req, res) {
   if (!req.query.path) {
     res.send('Stream not found.');
   }
+
   var path = decodeURIComponent(req.query.path);
   path = './public/downloads/' + path;
   var stat = fs.statSync(path);
   var total = stat.size;
+
   if (req.headers['range']) {
     var range = req.headers.range;
     var parts = range.replace(/bytes=/, "").split("-");
@@ -61,16 +63,24 @@ app.get('/stream', function(req, res) {
     var end = partialend ? parseInt(partialend, 10) : total - 1;
     var chunksize = (end - start)+1;
 
-    var file = fs.createReadStream(path, {start: start, end: end});
+    var file = fs.createReadStream(path, {
+      start: start,
+      end: end
+    });
+
     res.writeHead(206, {
       'Content-Range': 'bytes ' + start + '-' + end + '/' + total,
       'Accept-Ranges': 'bytes',
       'Content-Length': chunksize,
       'Content-Type': 'video/mp4'
     });
+
     file.pipe(res);
   } else {
-    res.writeHead(200, {'Content-Length': total, 'Content-Type': 'video/mp4'});
+    res.writeHead(200, {
+      'Content-Length': total,
+      'Content-Type': 'video/mp4'
+    });
     fs.createReadStream(path).pipe(res);
   }
 });
@@ -91,6 +101,9 @@ sockets.on('connection', function(socket) {
         torrentManager.refreshFeed(feed.url);
       });
     }
+    else {
+      torrentManager.update();
+    }
   });
 
   socket.on('add-feed', function(url) {
@@ -106,6 +119,10 @@ sockets.on('connection', function(socket) {
 
   socket.on('add-torrent', function(url) {
     torrentManager.add(url);
+  });
+
+  socket.on('update-torrent-title', function(data) {
+    torrentManager.updateTitle(data.id, data.title);
   });
 
   socket.on('download-torrent', function(torrent) {

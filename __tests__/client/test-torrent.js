@@ -1,3 +1,4 @@
+jest.dontMock('moment');
 jest.dontMock('../../src/client/components/Torrent.js');
 
 describe('Torrent', function() {

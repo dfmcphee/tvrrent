@@ -29,16 +29,23 @@ let updateMetadata = function(torrent) {
   guessit.parseName(torrent.title).then(function(result) {
     let title;
     if (result.type === 'episode') {
-      title = result.series;
+      omdb.search({terms: title, type: 'series'}, (err, results) => metaTVSearch(err, results, torrent, result.series));
     }
     else {
-      if (!/(\d){4}/.test(result.unidentified[0])) {
-        title = result.unidentified[0];
-      } else {
-        title = result.unidentified[1];
+      title = result.unidentified.shift();
+      if (/(\d){4}/.test(title)) {
+        title = result.unidentified.shift();
       }
+      omdb.search({terms: title}, (err, results) => metaUnidentifiedSearch(err, results, torrent, title, result.unidentified));
     }
-    omdb.search({terms: title, type: 'series'}, (err, results) => metaTVSearch(err, results, torrent, title));
+  });
+};
+
+let updateMetaFromTitle = function(id, title) {
+  db.findOne({ _id: id }, function (err, torrent) {
+    if (torrent) {
+      omdb.search({terms: title}, (err, results) => metaUnidentifiedSearch(err, results, torrent, title, []));
+    }
   });
 };
 
@@ -74,6 +81,26 @@ let metaMovieSearch = function(err, results, torrent, title) {
       show: false
     };
     db.update({ _id: torrent._id }, { $set: update }, {}, updateTorrents);
+  }
+  else {
+    omdb.get(results[0].imdb, (err, movie) => metaResult(err, movie, torrent, title));
+  }
+}
+
+let metaUnidentifiedSearch = function(err, results, torrent, title, unidentified) {
+  if (!results || !results.length) {
+    if (unidentified.length === 0) {
+      console.log('No movie results found');
+      let update = {
+        name: title,
+        show: false
+      };
+      db.update({ _id: torrent._id }, { $set: update }, {}, updateTorrents);
+    }
+    else {
+      let title = unidentified.shift();
+      omdb.search({terms: title}, (err, results) => metaUnidentifiedSearch(err, results, torrent, title, unidentified));
+    }
   }
   else {
     omdb.get(results[0].imdb, (err, movie) => metaResult(err, movie, torrent, title));
@@ -133,6 +160,14 @@ let torrentManager = {
         db.insert(newTorrents, (err) => updateAllMetadata());
       });
     });
+  },
+
+  update: function() {
+    updateTorrents();
+  },
+
+  updateTitle: function(id, title) {
+    updateMetaFromTitle(id, title);
   },
 
   download: function(torrent) {

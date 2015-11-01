@@ -1,0 +1,8 @@
+.input-with-addon {
+  display: flex;
+  margin-top: $default-spacing;
+
+  .button {
+    border-radius: 0 $default-border-radius $default-border-radius 0;
+  }
+}

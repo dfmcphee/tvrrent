@@ -4,6 +4,11 @@ import moment from 'moment';
 export default class Torrent extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      title: this.props.title,
+      editingTitle: false
+    };
   }
 
   download() {
@@ -21,6 +26,28 @@ export default class Torrent extends React.Component {
       percentage = percentage.toFixed(2);
     }
     return percentage + '%';
+  }
+
+  startEditing() {
+    this.setState({
+      editingTitle: true
+    });
+  }
+
+  titleChanged(event) {
+    this.setState({
+      title: event.target.value
+    });
+  }
+
+  updateTitle() {
+    this.props.socket.emit('update-torrent-title', {
+      id: this.props.id,
+      title: this.state.title
+    });
+    this.setState({
+      editingTitle: false
+    });
   }
 
   render() {
@@ -60,10 +87,22 @@ export default class Torrent extends React.Component {
       meta = <p>{this.props.year}</p>;
     }
 
+    let title;
+    if (this.state.editingTitle) {
+      title = (
+        <div className="input-with-addon">
+          <input value={this.state.title} onChange={::this.titleChanged} />
+          <button className="button" onClick={::this.updateTitle}>Update</button>
+        </div>
+      );
+    } else {
+      title = <h3 onDoubleClick={::this.startEditing}>{this.state.title}</h3>;
+    }
+
     return (
       <div className="torrent" key={this.props.id}>
         {image}
-        <h3>{this.props.title}</h3>
+        {title}
         {meta}
         {download}
         <p>{moment(this.props.published).from(moment())}</p>
