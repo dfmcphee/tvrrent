@@ -27,12 +27,11 @@ let streams = {};
 
 let updateMetadata = function(torrent) {
   guessit.parseName(torrent.title).then(function(result) {
-    let title;
     if (result.type === 'episode') {
-      omdb.search({terms: title, type: 'series'}, (err, results) => metaTVSearch(err, results, torrent, result.series));
+      omdb.search({terms: result.series, type: 'series'}, (err, results) => metaTVSearch(err, results, torrent, result.series));
     }
     else {
-      title = result.unidentified.shift();
+      let title = result.unidentified.shift();
       if (/(\d){4}/.test(title)) {
         title = result.unidentified.shift();
       }
@@ -73,7 +72,6 @@ let metaTVSearch = function(err, results, torrent, title) {
 };
 
 let metaMovieSearch = function(err, results, torrent, title) {
-  console.log(results);
   if (!results || !results[0]) {
     console.log('No movie results found');
     let update = {
