@@ -1,28 +1,32 @@
 /* Button */
+$button-height: 36px;
+$button-font-size: 16px;
+$button-font-weight: 200;
 
 .button {
   background: $teal;
-  font-size: 0.9rem;
-  border-radius: 3px;
+  box-sizing: border-box;
+  font-size: $button-font-size;
+  height: $button-height;
+  border-radius: $default-border-radius;
   color: $white;
-  font-weight: 100;
+  font-weight: $button-font-weight;
   padding: 6px 8px;
   border: none;
   cursor: pointer;
   text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 
   > span {
-    flex: 1 1 auto;
+    display: inline-block;
+    vertical-align: text-bottom;
   }
 
   > .icon {
-    flex: 0 0 auto;
+    display: inline-block;
+    vertical-align: middle;
   }
 
-  > span + .icon {
+  > .icon + span {
     margin-left: $default-spacing-halved;
   }
 }

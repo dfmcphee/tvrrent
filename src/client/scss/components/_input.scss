@@ -2,7 +2,12 @@
   display: flex;
   margin-top: $default-spacing;
 
+  input {
+    margin: 0;
+  }
+
   .button {
+    margin: 0;
     border-radius: 0 $default-border-radius $default-border-radius 0;
   }
 }
