@@ -9,7 +9,7 @@
     "watch-js": "./node_modules/.bin/babel src -d lib --experimental -w",
     "dev-server": "node lib/server/webpack",
     "server": "nodemon lib/server/server",
-    "prod-server": "NODE_ENV=production node lib/server/server",
+    "prod-server": "NODE_ENV=production pm2 start lib/server/server.js --name tvrrent",
     "start": "npm run watch-js & npm run dev-server & npm run server",
     "build-client": "webpack -p --config webpack.config.production.js",
     "build-server": "./node_modules/.bin/babel src/server --out-dir lib/server",
